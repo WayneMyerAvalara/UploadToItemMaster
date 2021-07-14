@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.VisualBasic.FileIO;
 using Avalara.AvaTax.RestClient;
 
 namespace ItemMasterLoad
@@ -96,15 +97,15 @@ namespace ItemMasterLoad
 
         private static void OpenAndParseCsv(List<ItemModel> itemModels, List<ProductClassificationSystemModel> classificationSystems)
         {
-            using (var reader = new StreamReader(PATH_TO_CSV))
+            using (Microsoft.VisualBasic.FileIO.TextFieldParser reader = new Microsoft.VisualBasic.FileIO.TextFieldParser(PATH_TO_CSV))
             {
-                var header = reader.ReadLine();
-                var headerValues = header.Split(",");
+                reader.HasFieldsEnclosedInQuotes = true;
+                reader.SetDelimiters(",");
+                var headerValues = reader.ReadFields();
 
-                while (!reader.EndOfStream)
+                while (!reader.EndOfData)
                 {
-                    var line = reader.ReadLine();
-                    var values = line.Split(',');
+                    var values = reader.ReadFields();
                     var classifications = new List<ClassificationModel>();
 
 
